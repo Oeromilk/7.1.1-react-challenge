@@ -3,25 +3,26 @@ var React = require('react');
 var Backbone = require('backbone');
 
 var ImageList = React.createClass({
+  handleDelete: function(e){
+    e.preventDefault();
+
+    this.props.handleDelete(this.props.model);
+  },
 
   render: function(){
-
-    var imageItems = this.props.image.map(function(image){
-
-      return (
-        <div key={image.cid}>
-          <img key={image.cid} className="card-img-top" ng-src="{image.get('form-url')}" alt="Image Holder" />
-          <div className="card-block">
-            <p className="card-text">Test</p>
-          </div>
-        </div>
-      );
-    });
+    var imageSrc = this.props.model.get('url');
+    var imageTitle = this.props.model.get('title');
 
     return (
-
-      <div className="card col-md-9 col-md-offset-2">
-        {imageItems}
+      <div className="card well col-md-8 col-md-offset-2">
+        <img className="card-img-top" src={imageSrc} alt="Image Holder" />
+        <div className="card-block">
+          <p className="card-text">{imageTitle}</p>
+          <div>
+            <button type="button" className="btn btn-info">Edit</button>
+            <button onClick={this.handleDelete} type="button" className="btn btn-danger">Delete</button>
+          </div>
+        </div>
       </div>
     );
   }

@@ -3,22 +3,16 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDom = require('react-dom');
 
-var NavBar = require('./components/form.jsx').NavBar;
-var models = require('./models/image_board.js');
+var AppComponent = require('./components/app.jsx').AppComponent;
 
 
 var AppRouter = Backbone.Router.extend({
   routes: {
     '': 'index'
   },
-  initialize: function(){
-    var images = this.images = new models.ImageCollection();
-    //console.log(this.images);
-    images.fetch();
-  },
   index: function(){
     ReactDom.render(
-      React.createElement(NavBar, {collection: this.images}),
+      React.createElement(AppComponent),
       document.getElementById('app')
     );
   }

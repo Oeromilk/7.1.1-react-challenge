@@ -1,77 +1,48 @@
 var $ = require('jquery');
 var React = require('react');
 
-var ImageList = require('../components/listing.jsx').ImageList;
-
-$.fn.serializeObject = function() {
-   return this.serializeArray().reduce(function(acum, i) {
-     acum[i.name] = i.value;
-     return acum;
-   }, {});
- };
-
-var NavBar = React.createClass({
-  componentWillMount: function(){
-    this.showForm = false;
+var FormComponent = React.createClass({
+  getInitialState: function(){
+    return {
+      url: this.props.model.get('url'),
+      title: this.props.model.get('title')
+    };
   },
-  toggleForm: function(e){
+  handleUrlChange: function(e){
+    var urlInput = e.target.value;
+    this.setState({url: urlInput});
+  },
+  HandleTitleChange: function(e){
+    var titleInput = e.target.value;
+    this.setState({title: titleInput});
+  },
+  handleAdd: function(e){
     e.preventDefault();
 
-    this.showForm = !this.Showform;
-    this.forceUpdate();
-  },
-  addForm: function(e){
-    e.preventDefault();
+    var newImage = {url: this.state.url, title: this.state.title};
 
-    var testObject = $('#add-image').serializeObject();
+    this.props.handleAdd(newImage);
 
-    this.props.collection.create(testObject);
-    $('#image-url').val('');
-    $('#image-description').val('');
+    // Tell the state to reset the fields
+    this.setState({url: '', title: ''});
   },
   render: function(){
-    //console.log(this.props.collection);
-
-    var displayForm;
-
-    if(this.showForm){
-      displayForm = (
-        <form id="add-image" className="form-inline well" onSubmit={this.addForm}>
-          <div className="form-group">
-            <label htmlFor="image-url">Image Url</label>
-            <input type="url" name="form-url" id="image-url" placeholder="Place image url here"/>
-          </div>
-          <div className="form-group">
-            <label htmlFor="image-description">Image Descrpition</label>
-            <input type="text" name="form-title" id="image-description" placeholder="Describe the image"/>
-          </div>
-          <button className="btn btn-success" >Add Image</button>
-        </form>
-      );
-    }
-
     return (
-      <div>
-        <nav className="navbar navbar-default">
-          <div className="container-fluid">
-            <div className="navbar-header">
-              <button className="btn btn-primary glyphicon glyphicon-plus"
-                onClick={this.toggleForm}></button>
-            </div>
-          </div>
-        </nav>
-        {displayForm}
-        <div className="container">
-          <div className="row well">
-            <ImageList image={this.props.collection} />
-          </div>
+      <form id="add-image" className="form-inline well" onSubmit={this.handleAdd}>
+        <div className="form-group">
+          <label htmlFor="image-url">Image Url</label>
+          <input onChange={this.handleUrlChange} type="url" name="form-url" id="image-url" value={this.state.url} placeholder="Place image url here"/>
         </div>
-      </div>
-
+        <div className="form-group">
+          <label htmlFor="image-description">Image Descrpition</label>
+          <input onChange={this.HandleTitleChange} type="text" name="form-title" id="image-description" value={this.state.title} placeholder="Describe the image"/>
+        </div>
+        <button type="submit" className="btn btn-success" >Add Image</button>
+      </form>
     );
   }
 });
 
 module.exports = {
-  NavBar: NavBar
+  FormComponent: FormComponent
 };
