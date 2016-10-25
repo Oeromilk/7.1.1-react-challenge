@@ -3,7 +3,8 @@ var Backbone = require('backbone');
 var React = require('react');
 var ReactDom = require('react-dom');
 
-var NavBar = require('./components/image_board.jsx').NavBar;
+var NavBar = require('./components/form.jsx').NavBar;
+var models = require('./models/image_board.js');
 
 
 var AppRouter = Backbone.Router.extend({
@@ -11,15 +12,17 @@ var AppRouter = Backbone.Router.extend({
     '': 'index'
   },
   initialize: function(){
-
+    var images = this.images = new models.ImageCollection();
+    //console.log(this.images);
+    images.fetch();
   },
   index: function(){
     ReactDom.render(
-      React.createElement(NavBar),
+      React.createElement(NavBar, {collection: this.images}),
       document.getElementById('app')
     );
   }
-})
+});
 
 var router = new AppRouter();
 

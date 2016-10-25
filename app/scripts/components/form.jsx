@@ -1,6 +1,8 @@
 var $ = require('jquery');
 var React = require('react');
 
+var ImageList = require('../components/listing.jsx').ImageList;
+
 $.fn.serializeObject = function() {
    return this.serializeArray().reduce(function(acum, i) {
      acum[i.name] = i.value;
@@ -21,11 +23,14 @@ var NavBar = React.createClass({
   addForm: function(e){
     e.preventDefault();
 
-    //$('#add-image').serializeObject();
+    var testObject = $('#add-image').serializeObject();
 
-    console.log($('#add-image').serializeObject());
+    this.props.collection.create(testObject);
+    $('#image-url').val('');
+    $('#image-description').val('');
   },
   render: function(){
+    //console.log(this.props.collection);
 
     var displayForm;
 
@@ -56,7 +61,13 @@ var NavBar = React.createClass({
           </div>
         </nav>
         {displayForm}
+        <div className="container">
+          <div className="row well">
+            <ImageList image={this.props.collection} />
+          </div>
+        </div>
       </div>
+
     );
   }
 });
