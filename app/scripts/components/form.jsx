@@ -4,9 +4,17 @@ var React = require('react');
 var FormComponent = React.createClass({
   getInitialState: function(){
     return {
-      url: this.props.model.get('url'),
-      title: this.props.model.get('title')
+      url: '',
+      title: ''
     };
+  },
+  componentWillReceiveProps: function(nextProps){
+    if(nextProps.model){
+      this.setState({
+        url: nextProps.model.get('url'),
+        title: nextProps.model.get('title')
+      });
+    }
   },
   handleUrlChange: function(e){
     var urlInput = e.target.value;
@@ -18,11 +26,13 @@ var FormComponent = React.createClass({
   },
   handleAdd: function(e){
     e.preventDefault();
-
     var newImage = {url: this.state.url, title: this.state.title};
 
-    this.props.handleAdd(newImage);
-
+    if(this.props.model){
+    this.props.editImage(this.props.model, newImage);
+    }else{
+      this.props.addImage(newImage);
+    }
     // Tell the state to reset the fields
     this.setState({url: '', title: ''});
   },
@@ -37,7 +47,7 @@ var FormComponent = React.createClass({
           <label htmlFor="image-description">Image Descrpition</label>
           <input onChange={this.HandleTitleChange} type="text" name="form-title" id="image-description" value={this.state.title} placeholder="Describe the image"/>
         </div>
-        <button type="submit" className="btn btn-success" >Add Image</button>
+        <button type="submit" className="btn btn-success" >{this.props.model ? 'Edit' : 'Add'} Image</button>
       </form>
     );
   }

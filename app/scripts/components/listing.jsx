@@ -8,7 +8,11 @@ var ImageList = React.createClass({
 
     this.props.handleDelete(this.props.model);
   },
+  handleEdit: function(e){
+    e.preventDefault();
 
+    this.props.handleEdit(this.props.model);
+  },
   render: function(){
     var imageSrc = this.props.model.get('url');
     var imageTitle = this.props.model.get('title');
@@ -19,7 +23,7 @@ var ImageList = React.createClass({
         <div className="card-block">
           <p className="card-text">{imageTitle}</p>
           <div>
-            <button type="button" className="btn btn-info">Edit</button>
+            <button onClick={this.handleEdit} type="button" className="btn btn-info">Edit</button>
             <button onClick={this.handleDelete} type="button" className="btn btn-danger">Delete</button>
           </div>
         </div>
